@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=2.0">
+  <title>領収書</title>
+  <link rel="stylesheet" href="./css/main.css" type="text/css">
+</head>
+
+<body>
+  <script src="./script/CalculationAmount.js" type="module"></script>
+  <script src="./script/main.js" type="module"></script>
+  <h1>源泉税計算</h1>
+  <div>インボイス
+    <select id="isRegistration" onchange="main.invoiceChange()">
+      <option value="" selected hidden>インボイス</option>
+      <option value="true">登録済み</option>
+      <option value="false">未登録</option>
+    </select>
+  </div>
+  <div>計算方法
+    <select id="isTakeHomePayment" onchange="main.selectChange()">
+      <option value="" selected hidden>手取り？</option>
+      <option value="true">手取</option>
+      <option value="false">税抜</option>
+    </select>
+  </div>
+  <div>金額
+    <input type="number" id="inputPrice">
+    <button id="btn" onclick="main.btn_click()">計算</button>
+  </div>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td>本体額:</td>
+        <td id="BasePrice"></td>
+        <td>
+          <font size="1"></font>
+        </td>
+      </tr>
+      <tr>
+        <td>調整額:</td>
+        <td id="Adjustment"></td>
+        <td>
+          <font size="1">本体額×1.96%</font>
+        </td>
+      </tr>
+      <tr>
+        <td>税抜額:</td>
+        <td id="ExcludingTAX"></td>
+        <td>
+          <font size="1">本体額-調整額</font>
+        </td>
+      </tr>
+      <tr>
+        <td>消費税:</td>
+        <td id="TAX"></td>
+        <td>
+          <font size="1">税抜額×10%</font>
+        </td>
+      </tr>
+      <tr>
+        <td>税込額:</td>
+        <td id="IncludingTAX"></td>
+        <td>
+          <font size="1">税抜額+消費税</font>
+        </td>
+      </tr>
+      <tr>
+        <td>源泉税:</td>
+        <td id="WithHoldingTAX"></td>
+        <td>
+          <font size="1">税抜額×10.21%</font>
+        </td>
+      </tr>
+      <tr>
+        <td>手取額:</td>
+        <td id="TransferAmount"></td>
+        <td>
+          <font size="1">税込額-源泉額</font>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <font size="1" color="#AAAAAA">
+    注）手取りの場合は本体価格=本体価格÷99.79%
+    <br>
+    &nbsp;99.79%=100%-10.21%(源泉税率)+10%（消費税率）
+  </font>
+  <br>
+  <br>
+  <canvas id="receipt" width="300" height="180"></canvas>
+</body>
+
+</html>
