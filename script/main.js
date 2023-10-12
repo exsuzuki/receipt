@@ -27,16 +27,25 @@ function selectChange() {
 }
 function btn_click() {
     inputPrice = Number(document.getElementById('inputPrice').value);
-    amount = new Calculation(inputPrice, isRegistration, isTakeHomePayment);
-    console.log(amount);
-    document.getElementById('BasePrice').innerHTML = amount.BasePrice.toLocaleString();
-    document.getElementById('Adjustment').innerHTML = amount.Adjustment.toLocaleString();
-    document.getElementById('ExcludingTAX').innerHTML = amount.ExcludingTAX.toLocaleString();
-    document.getElementById('TAX').innerHTML = amount.TAX.toLocaleString();
-    document.getElementById('IncludingTAX').innerHTML = amount.IncludingTAX.toLocaleString();
-    document.getElementById('WithHoldingTAX').innerHTML = amount.WithHoldingTAX.toLocaleString();
-    document.getElementById('TransferAmount').innerHTML = amount.TransferAmount.toLocaleString();
-    drawReceipt();
+    try {
+        amount = new Calculation(inputPrice, isRegistration, isTakeHomePayment);
+    }
+    catch (error) {
+        console.error(error.message);
+        alert(error.message);
+        amount = new Calculation(0, true, true);
+    }
+    finally {
+        console.log(amount);
+        document.getElementById('BasePrice').innerHTML = amount.BasePrice.toLocaleString();
+        document.getElementById('Adjustment').innerHTML = amount.Adjustment.toLocaleString();
+        document.getElementById('ExcludingTAX').innerHTML = amount.ExcludingTAX.toLocaleString();
+        document.getElementById('TAX').innerHTML = amount.TAX.toLocaleString();
+        document.getElementById('IncludingTAX').innerHTML = amount.IncludingTAX.toLocaleString();
+        document.getElementById('WithHoldingTAX').innerHTML = amount.WithHoldingTAX.toLocaleString();
+        document.getElementById('TransferAmount').innerHTML = amount.TransferAmount.toLocaleString();
+        drawReceipt();
+    }
 }
 function drawReceipt() {
     const cvs = document.getElementById('receipt');

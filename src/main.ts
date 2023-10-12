@@ -1,4 +1,4 @@
-import { Calculation } from './CalculationAmount.js'
+import { Calculation, UnimplementedException } from './CalculationAmount.js'
 interface Window {
   main: any
 }
@@ -29,16 +29,23 @@ function selectChange() {
 }
 function btn_click() {
   inputPrice = Number((document.getElementById('inputPrice') as HTMLInputElement).value);
-  amount = new Calculation(inputPrice, isRegistration, isTakeHomePayment);
-  console.log(amount);
-  (document.getElementById('BasePrice') as HTMLTableCellElement).innerHTML = amount.BasePrice.toLocaleString();
-  (document.getElementById('Adjustment') as HTMLTableCellElement).innerHTML = amount.Adjustment.toLocaleString();
-  (document.getElementById('ExcludingTAX') as HTMLTableCellElement).innerHTML = amount.ExcludingTAX.toLocaleString();
-  (document.getElementById('TAX') as HTMLTableCellElement).innerHTML = amount.TAX.toLocaleString();
-  (document.getElementById('IncludingTAX') as HTMLTableCellElement).innerHTML = amount.IncludingTAX.toLocaleString();
-  (document.getElementById('WithHoldingTAX') as HTMLTableCellElement).innerHTML = amount.WithHoldingTAX.toLocaleString();
-  (document.getElementById('TransferAmount') as HTMLTableCellElement).innerHTML = amount.TransferAmount.toLocaleString();
-  drawReceipt();
+  try {
+    amount = new Calculation(inputPrice, isRegistration, isTakeHomePayment);
+  } catch (error: any) {
+    console.error(error.message);
+    alert(error.message);
+    amount = new Calculation(0, true, true);
+  } finally {
+    console.log(amount);
+    (document.getElementById('BasePrice') as HTMLTableCellElement).innerHTML = amount.BasePrice.toLocaleString();
+    (document.getElementById('Adjustment') as HTMLTableCellElement).innerHTML = amount.Adjustment.toLocaleString();
+    (document.getElementById('ExcludingTAX') as HTMLTableCellElement).innerHTML = amount.ExcludingTAX.toLocaleString();
+    (document.getElementById('TAX') as HTMLTableCellElement).innerHTML = amount.TAX.toLocaleString();
+    (document.getElementById('IncludingTAX') as HTMLTableCellElement).innerHTML = amount.IncludingTAX.toLocaleString();
+    (document.getElementById('WithHoldingTAX') as HTMLTableCellElement).innerHTML = amount.WithHoldingTAX.toLocaleString();
+    (document.getElementById('TransferAmount') as HTMLTableCellElement).innerHTML = amount.TransferAmount.toLocaleString();
+    drawReceipt();
+  }
 }
 function drawReceipt() {
   const cvs: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('receipt');

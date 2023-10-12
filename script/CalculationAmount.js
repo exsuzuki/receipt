@@ -34,6 +34,9 @@ export class Calculation {
             this._ExcludingTAX += Fraction;
             this._TransferAmount += Fraction;
         }
+        if (this._ExcludingTAX > 1000000) {
+            throw new UnimplementedException("未実装です。");
+        }
     }
     get BasePrice() { return this._BasePrice; }
     get Adjustment() { return this._Adjustment; }
@@ -42,4 +45,10 @@ export class Calculation {
     get IncludingTAX() { return this._IncludingTAX; }
     get WithHoldingTAX() { return this._WithHoldingTAX; }
     get TransferAmount() { return this._TransferAmount; }
+}
+export class UnimplementedException extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'UnimplementedException';
+    }
 }

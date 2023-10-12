@@ -1,4 +1,4 @@
-import { Calculation } from "./CalculationAmount"
+import { Calculation, UnimplementedException } from "./CalculationAmount"
 describe("Base", () => {
   const inputPrice: number = 100000;
   describe("CalculationFF", () => {
@@ -62,5 +62,22 @@ describe("Exception", () => {
     test("IncludingTAX", () => { expect(amount.IncludingTAX).toEqual(99208); })
     test("WithHoldingTAX", () => { expect(amount.WithHoldingTAX).toEqual(9208); })
     test("TransferAmount", () => { expect(amount.TransferAmount).toEqual(90000); })
+  })
+  describe("Threshold", () => {
+    test("1000001", () => {
+      expect(() => {
+        new Calculation(1000001, true, false);
+      }).toThrow(UnimplementedException);
+    })
+    test("1000000", () => {
+      expect(() => {
+        new Calculation(1000000, true, false);
+      }).not.toThrow(UnimplementedException);
+    })
+    test("999999", () => {
+      expect(() => {
+        new Calculation(999999, true, false);
+      }).not.toThrow(UnimplementedException);
+    })
   })
 })
