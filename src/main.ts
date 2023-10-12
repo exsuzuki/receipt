@@ -77,7 +77,7 @@ function drawReceipt() {
   ctx.textAlign = 'center';
   ctx.fillText('印紙', 30, 140);
   ctx.strokeRect(10, 120, 40, 50);
-  if (amount.ExcludingTAX <= 50000) {
+  if (amount.ExcludingTAX < 50000) {
     ctx.beginPath();
     ctx.moveTo(50, 120);
     ctx.lineTo(10, 170);
