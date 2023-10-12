@@ -1,14 +1,17 @@
-import { Calculation, UnimplementedException } from './CalculationAmount.js'
-interface Window {
-  main: any
-}
-declare var window: Window;
+import { Calculation } from './CalculationAmount.js'
+const Registration: HTMLSelectElement = document.getElementById('isRegistration') as HTMLSelectElement;
+const TakeHomePayment: HTMLSelectElement = document.getElementById('isTakeHomePayment') as HTMLSelectElement;
 let inputPrice: number;
 let isRegistration: boolean;
 let isTakeHomePayment: boolean;
 let amount: Calculation;
+document.addEventListener('DOMContentLoaded', function () {
+  if (Registration) Registration.addEventListener('change', invoiceChange);
+  if (TakeHomePayment) TakeHomePayment.addEventListener('change', selectChange);
+  const CalculationBtn: HTMLButtonElement = document.getElementById('btn') as HTMLButtonElement;
+  if (CalculationBtn) CalculationBtn.addEventListener('click', btn_click);
+});
 function invoiceChange() {
-  let Registration: HTMLSelectElement = document.getElementById('isRegistration') as HTMLSelectElement;
   if (Registration.value == 'true') {
     isRegistration = true;
   } else {
@@ -18,7 +21,6 @@ function invoiceChange() {
   btn_click();
 }
 function selectChange() {
-  let TakeHomePayment = document.getElementById('isTakeHomePayment') as HTMLSelectElement;
   if (TakeHomePayment.value == 'true') {
     isTakeHomePayment = true;
   } else {
@@ -97,8 +99,3 @@ function drawReceipt() {
   ctx.fillText('名前: 〇〇〇〇〇〇', 100, 140);
   if (isRegistration) ctx.fillText('登録番号: T〇〇〇〇〇〇〇〇〇〇〇〇', 100, 160);
 }
-window.main = {
-  invoiceChange,
-  selectChange,
-  btn_click
-};

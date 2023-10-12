@@ -13,14 +13,14 @@
   <script src="./script/main.js" type="module"></script>
   <h1>源泉税計算</h1>
   <div>インボイス
-    <select id="isRegistration" onchange="main.invoiceChange()">
+    <select id="isRegistration">
       <option value="" selected hidden>インボイス</option>
       <option value="true">登録済み</option>
       <option value="false">未登録</option>
     </select>
   </div>
   <div>計算方法
-    <select id="isTakeHomePayment" onchange="main.selectChange()">
+    <select id="isTakeHomePayment">
       <option value="" selected hidden>手取り？</option>
       <option value="true">手取</option>
       <option value="false">税抜</option>
@@ -28,7 +28,7 @@
   </div>
   <div>金額
     <input type="number" id="inputPrice">
-    <button id="btn" onclick="main.btn_click()">計算</button>
+    <button id="btn">計算</button>
   </div>
   <table class="table">
     <tbody>

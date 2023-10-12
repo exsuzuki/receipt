@@ -1,10 +1,20 @@
 import { Calculation } from './CalculationAmount.js';
+const Registration = document.getElementById('isRegistration');
+const TakeHomePayment = document.getElementById('isTakeHomePayment');
 let inputPrice;
 let isRegistration;
 let isTakeHomePayment;
 let amount;
+document.addEventListener('DOMContentLoaded', function () {
+    if (Registration)
+        Registration.addEventListener('change', invoiceChange);
+    if (TakeHomePayment)
+        TakeHomePayment.addEventListener('change', selectChange);
+    const CalculationBtn = document.getElementById('btn');
+    if (CalculationBtn)
+        CalculationBtn.addEventListener('click', btn_click);
+});
 function invoiceChange() {
-    let Registration = document.getElementById('isRegistration');
     if (Registration.value == 'true') {
         isRegistration = true;
     }
@@ -15,7 +25,6 @@ function invoiceChange() {
     btn_click();
 }
 function selectChange() {
-    let TakeHomePayment = document.getElementById('isTakeHomePayment');
     if (TakeHomePayment.value == 'true') {
         isTakeHomePayment = true;
     }
@@ -98,8 +107,3 @@ function drawReceipt() {
     if (isRegistration)
         ctx.fillText('登録番号: T〇〇〇〇〇〇〇〇〇〇〇〇', 100, 160);
 }
-window.main = {
-    invoiceChange,
-    selectChange,
-    btn_click
-};
