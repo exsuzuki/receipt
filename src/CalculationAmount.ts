@@ -1,6 +1,9 @@
 const Adjustment_RATE: number = 0.0196;
 const TAX_RATE: number = 0.1;
 const WithHoldingTAX_RATE = 0.1021;
+const OverWithHoldingTAX_RATE = 0.2042;
+const Reverse_RATE: number = (1 - WithHoldingTAX_RATE + TAX_RATE);
+const OverReverse_RATE: number = (1 - OverWithHoldingTAX_RATE + TAX_RATE);
 export class Calculation {
   private _BasePrice: number = 0;
   private _Adjustment: number = 0;
@@ -10,11 +13,7 @@ export class Calculation {
   private _WithHoldingTAX: number = 0;
   private _TransferAmount: number = 0;
   public constructor(inputPrice: number, isRegistration: boolean, isTakeHomePayment: boolean) {
-    if (isTakeHomePayment) {
-      this._BasePrice = Math.floor(inputPrice / (1 - WithHoldingTAX_RATE + TAX_RATE));
-    } else {
-      this._BasePrice = inputPrice;
-    }
+    this.BasePrice_Caller(inputPrice, isTakeHomePayment);
     if (isRegistration) {
       this._Adjustment = 0;
     } else {
@@ -32,10 +31,19 @@ export class Calculation {
       this._ExcludingTAX += Fraction;
       this._TransferAmount += Fraction;
     }
-    if (this._ExcludingTAX > 1000000) {
-      throw new UnimplementedException("未実装です。");
+  };
+  private BasePrice_Caller(inputPrice: number, isTakeHomePayment: boolean): void {
+    if (isTakeHomePayment) this.TakeHomePayment_Calculation(inputPrice);
+    else this.ExcludingTAX_Calculation(inputPrice);
+  }
+  private TakeHomePayment_Calculation(inputPrice: number) {
+    const Limit: number = Math.floor(1000000 / Reverse_RATE);
+    if (inputPrice <= Limit) {
+      this._BasePrice = Math.floor(inputPrice / Reverse_RATE);
+
     }
   }
+  private ExcludingTAX_Calculation(inputPrice: number) { }
   get BasePrice(): number { return this._BasePrice; }
   get Adjustment(): number { return this._Adjustment; }
   get ExcludingTAX(): number { return this._ExcludingTAX; }
@@ -44,10 +52,3 @@ export class Calculation {
   get WithHoldingTAX(): number { return this._WithHoldingTAX; }
   get TransferAmount(): number { return this._TransferAmount; }
 }
-export class UnimplementedException extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'UnimplementedException';
-  }
-}
-

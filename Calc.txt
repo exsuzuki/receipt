@@ -1,0 +1,35 @@
+WithHoldingTaxRate
+10.21 Normal
+20.42 Over100
+
+1000000*10.21%=102100
+
+-  CalculateExcludeTAX
+excludeTax:1000000
+Tax:100000
+includeTax:1100000
+withholdingTax:102100
+transferAmount:997900
+---success---
+
+-  CalculateTakeHomePayment
+1000000/99.79% // error
+excludeTax:1002104
+Tax:100210
+includeTax:1102314
+withHoldingTax:102100+429:102529
+transferAmount:999785 // error
+---failure---
+
+1000000:takeHomePayment
+99790/99.79%=1000000
+1000000-997900=2100/89.58%=2344
+excludingTax:1002344
+tax:100234
+includeTax:1102578
+withHoldingTAX:102578
+  1000000*10.21=102100
+  2344*20.42=478
+transferAmount:1000000
+---success---
+
