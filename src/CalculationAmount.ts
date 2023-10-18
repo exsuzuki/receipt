@@ -4,6 +4,8 @@ const WithHoldingTAX_RATE = 0.1021;
 const OverWithHoldingTAX_RATE = 0.2042;
 const Reverse_RATE: number = (1 - WithHoldingTAX_RATE + TAX_RATE);
 const OverReverse_RATE: number = (1 - OverWithHoldingTAX_RATE + TAX_RATE);
+const LimitPrice: number = 1000000;
+const Limit: number = Math.floor(LimitPrice * Reverse_RATE);
 export class Calculation {
   private _BasePrice: number = 0;
   private _Adjustment: number = 0;
@@ -22,7 +24,7 @@ export class Calculation {
     this._ExcludingTAX = this.BasePrice - this.Adjustment;
     this._TAX = Math.floor(this.ExcludingTAX * TAX_RATE);
     this._IncludingTAX = this.ExcludingTAX + this.TAX;
-    this._WithHoldingTAX = Math.floor(this.ExcludingTAX * WithHoldingTAX_RATE);
+    this.WithHoldingTAX_Calculation(this.ExcludingTAX);
     this._TransferAmount = this.IncludingTAX - this.WithHoldingTAX;
     if (isTakeHomePayment == true && isRegistration == true) {
       let Fraction = inputPrice - this.TransferAmount;
@@ -34,16 +36,25 @@ export class Calculation {
   };
   private BasePrice_Caller(inputPrice: number, isTakeHomePayment: boolean): void {
     if (isTakeHomePayment) this.TakeHomePayment_Calculation(inputPrice);
-    else this.ExcludingTAX_Calculation(inputPrice);
+    else this._BasePrice = inputPrice;
   }
-  private TakeHomePayment_Calculation(inputPrice: number) {
-    const Limit: number = Math.floor(1000000 / Reverse_RATE);
+  private TakeHomePayment_Calculation(inputPrice: number): void {
     if (inputPrice <= Limit) {
       this._BasePrice = Math.floor(inputPrice / Reverse_RATE);
-
+    } else {
+      let OverPrice: number = Math.floor((inputPrice - Limit) / OverReverse_RATE);
+      this._BasePrice = LimitPrice + OverPrice;
     }
   }
-  private ExcludingTAX_Calculation(inputPrice: number) { }
+  private WithHoldingTAX_Calculation(ExcludingTAX: number): void {
+    if (ExcludingTAX <= LimitPrice) {
+      this._WithHoldingTAX = Math.floor(ExcludingTAX * WithHoldingTAX_RATE);
+    } else {
+      let NormalPrice: number = Math.floor(LimitPrice * WithHoldingTAX_RATE);
+      let OverPrice: number = Math.floor((ExcludingTAX - LimitPrice) * OverWithHoldingTAX_RATE);
+      this._WithHoldingTAX = NormalPrice + OverPrice;
+    }
+  }
   get BasePrice(): number { return this._BasePrice; }
   get Adjustment(): number { return this._Adjustment; }
   get ExcludingTAX(): number { return this._ExcludingTAX; }

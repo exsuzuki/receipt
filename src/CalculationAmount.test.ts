@@ -42,6 +42,49 @@ describe("Base", () => {
     test("TransferAmount", () => { expect(amount.TransferAmount).toEqual(100000); })
   })
 })
+describe("Over", () => {
+  const inputPrice: number = 1500000;
+  describe("CalculationFF", () => {
+    let amount: Calculation = new Calculation(inputPrice, false, false);
+    test("BasePrice", () => { expect(amount.BasePrice).toEqual(1500000); })
+    test("Adjustment", () => { expect(amount.Adjustment).toEqual(29400); })
+    test("ExcludingTAX", () => { expect(amount.ExcludingTAX).toEqual(1470600); })
+    test("TAX", () => { expect(amount.TAX).toEqual(147060); })
+    test("IncludingTAX", () => { expect(amount.IncludingTAX).toEqual(1617660); })
+    test("WithHoldingTAX", () => { expect(amount.WithHoldingTAX).toEqual(198196); })
+    test("TransferAmount", () => { expect(amount.TransferAmount).toEqual(1419464); })
+  })
+  describe("CalculationTF", () => {
+    let amount: Calculation = new Calculation(inputPrice, true, false);
+    test("BasePrice", () => { expect(amount.BasePrice).toEqual(1500000); })
+    test("Adjustment", () => { expect(amount.Adjustment).toEqual(0); })
+    test("ExcludingTAX", () => { expect(amount.ExcludingTAX).toEqual(1500000); })
+    test("TAX", () => { expect(amount.TAX).toEqual(150000); })
+    test("IncludingTAX", () => { expect(amount.IncludingTAX).toEqual(1650000); })
+    test("WithHoldingTAX", () => { expect(amount.WithHoldingTAX).toEqual(204200); })
+    test("TransferAmount", () => { expect(amount.TransferAmount).toEqual(1445800); })
+  })
+  describe("CalculationFT", () => {
+    let amount: Calculation = new Calculation(inputPrice, false, true);
+    test("BasePrice", () => { expect(amount.BasePrice).toEqual(1560504); })
+    test("Adjustment", () => { expect(amount.Adjustment).toEqual(30585); })
+    test("ExcludingTAX", () => { expect(amount.ExcludingTAX).toEqual(1529919); })
+    test("TAX", () => { expect(amount.TAX).toEqual(152991); })
+    test("IncludingTAX", () => { expect(amount.IncludingTAX).toEqual(1682910); })
+    test("WithHoldingTAX", () => { expect(amount.WithHoldingTAX).toEqual(210309); })
+    test("TransferAmount", () => { expect(amount.TransferAmount).toEqual(1472601); })
+  })
+  describe("CalculationTT", () => {
+    let amount: Calculation = new Calculation(inputPrice, true, true);
+    test("BasePrice", () => { expect(amount.BasePrice).toEqual(1560504); })
+    test("Adjustment", () => { expect(amount.Adjustment).toEqual(0); })
+    test("ExcludingTAX", () => { expect(amount.ExcludingTAX).toEqual(1560504); })
+    test("TAX", () => { expect(amount.TAX).toEqual(156050); })
+    test("IncludingTAX", () => { expect(amount.IncludingTAX).toEqual(1716554); })
+    test("WithHoldingTAX", () => { expect(amount.WithHoldingTAX).toEqual(216554); })
+    test("TransferAmount", () => { expect(amount.TransferAmount).toEqual(1500000); })
+  })
+})
 describe("Threshold100", () => {
   const inputPrice = 1000000;
   describe("CalculationFF", () => {
