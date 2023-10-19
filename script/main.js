@@ -36,25 +36,16 @@ function selectChange() {
 }
 function btn_click() {
     inputPrice = Number(document.getElementById('inputPrice').value);
-    try {
-        amount = new Calculation(inputPrice, isRegistration, isTakeHomePayment);
-    }
-    catch (error) {
-        console.error(error.message);
-        alert(error.message);
-        amount = new Calculation(0, true, true);
-    }
-    finally {
-        console.log(amount);
-        document.getElementById('BasePrice').innerHTML = amount.BasePrice.toLocaleString();
-        document.getElementById('Adjustment').innerHTML = amount.Adjustment.toLocaleString();
-        document.getElementById('ExcludingTAX').innerHTML = amount.ExcludingTAX.toLocaleString();
-        document.getElementById('TAX').innerHTML = amount.TAX.toLocaleString();
-        document.getElementById('IncludingTAX').innerHTML = amount.IncludingTAX.toLocaleString();
-        document.getElementById('WithHoldingTAX').innerHTML = amount.WithHoldingTAX.toLocaleString();
-        document.getElementById('TransferAmount').innerHTML = amount.TransferAmount.toLocaleString();
-        drawReceipt();
-    }
+    amount = new Calculation(inputPrice, isRegistration, isTakeHomePayment);
+    console.log(amount);
+    document.getElementById('BasePrice').innerHTML = amount.BasePrice.toLocaleString();
+    document.getElementById('Adjustment').innerHTML = amount.Adjustment.toLocaleString();
+    document.getElementById('ExcludingTAX').innerHTML = amount.ExcludingTAX.toLocaleString();
+    document.getElementById('TAX').innerHTML = amount.TAX.toLocaleString();
+    document.getElementById('IncludingTAX').innerHTML = amount.IncludingTAX.toLocaleString();
+    document.getElementById('WithHoldingTAX').innerHTML = amount.WithHoldingTAX.toLocaleString();
+    document.getElementById('TransferAmount').innerHTML = amount.TransferAmount.toLocaleString();
+    drawReceipt();
 }
 function drawReceipt() {
     const cvs = document.getElementById('receipt');
@@ -93,7 +84,16 @@ function drawReceipt() {
     ctx.textAlign = 'center';
     ctx.fillText('印紙', 30, 140);
     ctx.strokeRect(10, 120, 40, 50);
-    if (amount.ExcludingTAX < 50000) {
+    if (amount.ExcludingTAX >= 2000000) {
+        ctx.fillText('600', 30, 150);
+    }
+    else if (amount.ExcludingTAX >= 1000000) {
+        ctx.fillText('400', 30, 150);
+    }
+    else if (amount.ExcludingTAX >= 50000) {
+        ctx.fillText('200', 30, 150);
+    }
+    else {
         ctx.beginPath();
         ctx.moveTo(50, 120);
         ctx.lineTo(10, 170);

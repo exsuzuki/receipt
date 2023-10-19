@@ -4,6 +4,8 @@ const WithHoldingTAX_RATE = 0.1021;
 const OverWithHoldingTAX_RATE = 0.2042;
 const Reverse_RATE = (1 - WithHoldingTAX_RATE + TAX_RATE);
 const OverReverse_RATE = (1 - OverWithHoldingTAX_RATE + TAX_RATE);
+const LimitPrice = 1000000;
+const Limit = Math.floor(LimitPrice * Reverse_RATE);
 export class Calculation {
     constructor(inputPrice, isRegistration, isTakeHomePayment) {
         this._BasePrice = 0;
@@ -23,32 +25,42 @@ export class Calculation {
         this._ExcludingTAX = this.BasePrice - this.Adjustment;
         this._TAX = Math.floor(this.ExcludingTAX * TAX_RATE);
         this._IncludingTAX = this.ExcludingTAX + this.TAX;
-        this._WithHoldingTAX = Math.floor(this.ExcludingTAX * WithHoldingTAX_RATE);
+        this.WithHoldingTAX_Calculation(this.ExcludingTAX);
         this._TransferAmount = this.IncludingTAX - this.WithHoldingTAX;
-        /** 一時退避
         if (isTakeHomePayment == true && isRegistration == true) {
-          let Fraction = inputPrice - this.TransferAmount;
-          this._BasePrice += Fraction;
-          this._IncludingTAX += Fraction;
-          this._ExcludingTAX += Fraction;
-          this._TransferAmount += Fraction;
+            let Fraction = inputPrice - this.TransferAmount;
+            this._BasePrice += Fraction;
+            this._IncludingTAX += Fraction;
+            this._ExcludingTAX += Fraction;
+            this._TransferAmount += Fraction;
         }
-         */
     }
     ;
     BasePrice_Caller(inputPrice, isTakeHomePayment) {
         if (isTakeHomePayment)
             this.TakeHomePayment_Calculation(inputPrice);
         else
-            this.ExcludingTAX_Calculation(inputPrice);
+            this._BasePrice = inputPrice;
     }
     TakeHomePayment_Calculation(inputPrice) {
-        const Limit = Math.floor(1000000 / Reverse_RATE);
         if (inputPrice <= Limit) {
             this._BasePrice = Math.floor(inputPrice / Reverse_RATE);
         }
+        else {
+            let OverPrice = Math.floor((inputPrice - Limit) / OverReverse_RATE);
+            this._BasePrice = LimitPrice + OverPrice;
+        }
     }
-    ExcludingTAX_Calculation(inputPrice) { }
+    WithHoldingTAX_Calculation(ExcludingTAX) {
+        if (ExcludingTAX <= LimitPrice) {
+            this._WithHoldingTAX = Math.floor(ExcludingTAX * WithHoldingTAX_RATE);
+        }
+        else {
+            let NormalPrice = Math.floor(LimitPrice * WithHoldingTAX_RATE);
+            let OverPrice = Math.floor((ExcludingTAX - LimitPrice) * OverWithHoldingTAX_RATE);
+            this._WithHoldingTAX = NormalPrice + OverPrice;
+        }
+    }
     get BasePrice() { return this._BasePrice; }
     get Adjustment() { return this._Adjustment; }
     get ExcludingTAX() { return this._ExcludingTAX; }
