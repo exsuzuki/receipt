@@ -6,6 +6,14 @@ const Reverse_RATE: number = (1 - WithHoldingTAX_RATE + TAX_RATE);
 const OverReverse_RATE: number = (1 - OverWithHoldingTAX_RATE + TAX_RATE);
 const LimitPrice: number = 1000000;
 const Limit: number = Math.floor(LimitPrice * Reverse_RATE);
+export const __local__ = {
+  Adjustment_RATE,
+  TAX_RATE,
+  WithHoldingTAX_RATE,
+  OverWithHoldingTAX_RATE,
+  Reverse_RATE,
+  OverReverse_RATE,
+}
 export class Calculation {
   private _BasePrice: number = 0;
   private _Adjustment: number = 0;

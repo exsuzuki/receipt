@@ -1,4 +1,12 @@
-import { Calculation } from "./CalculationAmount"
+import { Calculation, __local__ } from "./CalculationAmount"
+describe('RateCheck', () => {
+  test('Adjustment', () => { expect(__local__.Adjustment_RATE).toEqual(0.0196); })
+  test('TAX', () => { expect(__local__.TAX_RATE).toEqual(0.1); })
+  test('WithHoldingTAX', () => { expect(__local__.WithHoldingTAX_RATE).toEqual(0.1021); })
+  test('OverWithHoldingTAX', () => { expect(__local__.OverWithHoldingTAX_RATE).toEqual(0.2042); })
+  test('Reverse', () => { expect(__local__.Reverse_RATE).toEqual(0.9979); })
+  test('OverReverse', () => { expect(__local__.OverReverse_RATE).toEqual(0.8958); })
+})
 describe("Base", () => {
   const inputPrice: number = 100000;
   describe("CalculationFF", () => {
@@ -149,21 +157,4 @@ describe("Exception", () => {
     test("WithHoldingTAX", () => { expect(amount.WithHoldingTAX).toEqual(9208); })
     test("TransferAmount", () => { expect(amount.TransferAmount).toEqual(90000); })
   })
-  // describe("Threshold", () => {
-  //   test("1000001", () => {
-  //     expect(() => {
-  //       new Calculation(1000001, true, false);
-  //     }).toThrow(UnimplementedException);
-  //   })
-  //   test("1000000", () => {
-  //     expect(() => {
-  //       new Calculation(1000000, true, false);
-  //     }).not.toThrow(UnimplementedException);
-  //   })
-  //   test("999999", () => {
-  //     expect(() => {
-  //       new Calculation(999999, true, false);
-  //     }).not.toThrow(UnimplementedException);
-  //   })
-  // })
 })
