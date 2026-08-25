@@ -1,4 +1,4 @@
-const Adjustment_RATE = 0.0196;
+const Adjustment_RATE = 0.0292;
 const TAX_RATE = 0.1;
 const WithHoldingTAX_RATE = 0.1021;
 const OverWithHoldingTAX_RATE = 0.2042;
